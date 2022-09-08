@@ -26,58 +26,60 @@ public class Controller {
     }
 
     @RequestMapping(
-        value = "/v1/demo",
-        method = RequestMethod.POST
-)
-public ResponseEntity<String> procedure0(@PathVariable Map<String, String> _pathParams,
-                                         @RequestParam Map<String,String> _queryParams,
-                                         @RequestHeader Map<String, String> _headerParams,
-                                         @RequestBody String _rawBody) {
-    try {
-        JsonNode _body = mapper.readTree(_rawBody);
+            value = "/v1/demo",
+            method = RequestMethod.POST,
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public ResponseEntity<String> procedure0(@PathVariable Map<String, String> _pathParams,
+                                             @RequestParam Map<String,String> _queryParams,
+                                             @RequestHeader Map<String, String> _headerParams,
+                                             @RequestBody String _rawBody) {
+        try {
+            JsonNode _body = mapper.readTree(_rawBody);
 
-        String scheme = "http";
+            String scheme = "http";
 
-        HttpMethod method = HttpMethod.valueOf("POST");
+            HttpMethod method = HttpMethod.valueOf("POST");
 
-        String path = "/v0/demo";
+            String path = "/v0/demo";
 
-        Map<String, String> pathParams = new HashMap<>();
-        
+            Map<String, String> pathParams = new HashMap<>();
 
-        Map<String,String> queryParams = new HashMap<>();
-        
 
-        Map<String, String> headerParams = new HashMap<>();
-        headerParams.put("maxCalls", _headerParams.get("maxCalls"));headerParams.put("calls", _headerParams.get("calls"));headerParams.put("fanout", _headerParams.get("fanout"));
+            Map<String,String> queryParams = new HashMap<>();
 
-        String body = "{\"p1_v0\":\"" + _body.get("p1_v1").textValue() + "\",\"p2_v0\":\"" + _body.get("p2_v1").textValue() + "\",\"p3_v0\":\"" + _body.get("p3_v1").textValue() + "\",\"p4_v0\":\"" + _body.get("p4_v1").textValue() + "\",\"p5_v0\":\"" + _body.get("p5_v1").textValue() + "\"}";
 
-        MediaType sendType = MediaType.valueOf("APPLICATION_JSON");
+            Map<String, String> headerParams = new HashMap<>();
+            headerParams.put("maxCalls", _headerParams.get("maxCalls"));headerParams.put("calls", _headerParams.get("calls"));headerParams.put("fanout", _headerParams.get("fanout"));
 
-        MediaType receiveType = MediaType.valueOf("APPLICATION_JSON");
+            String body = "{\"p1_v0\":\"" + _body.get("p1_v1").textValue() + "\",\"p2_v0\":\"" + _body.get("p2_v1").textValue() + "\",\"p3_v0\":\"" + _body.get("p3_v1").textValue() + "\",\"p4_v0\":\"" + _body.get("p4_v1").textValue() + "\",\"p5_v0\":\"" + _body.get("p5_v1").textValue() + "\"}";
 
-        ResponseEntity<String> responseEntity = forwardRequest(
-            scheme, HOST, PORT, method, path, pathParams, queryParams, headerParams, body, sendType, receiveType
-        );
+            MediaType sendType = MediaType.valueOf("APPLICATION_JSON");
 
-        HttpStatus status = responseEntity.getStatusCode();
-        _headerParams = responseEntity.getHeaders().toSingleValueMap();
-        _body = mapper.readTree(responseEntity.getBody());
+            MediaType receiveType = MediaType.valueOf("APPLICATION_JSON");
 
-        if(status.value() == 200) {
-	HttpHeaders responseHeaders = new HttpHeaders();
+            ResponseEntity<String> responseEntity = forwardRequest(
+                    scheme, HOST, PORT, method, path, pathParams, queryParams, headerParams, body, sendType, receiveType
+            );
 
-String responseBody = "{\"p1_v1\":\"" + _body.get("p1_v0").textValue() + "\",\"p2_v1\":\"" + _body.get("p2_v0").textValue() + "\",\"p3_v1\":\"" + _body.get("p3_v0").textValue() + "\",\"p4_v1\":\"" + _body.get("p4_v0").textValue() + "\",\"p5_v1\":\"" + _body.get("p5_v0").textValue() + "\"}";
-return forwardResponse(200, responseHeaders, responseBody);
-};
-return ResponseEntity.internalServerError().body("UNMAPPED RESPONSE");
+            HttpStatus status = responseEntity.getStatusCode();
+            _headerParams = responseEntity.getHeaders().toSingleValueMap();
+            _body = mapper.readTree(responseEntity.getBody());
 
-    } catch (Exception e) {
-        e.printStackTrace();
-        return ResponseEntity.internalServerError().body(e.toString());
+            if(status.value() == 200) {
+                HttpHeaders responseHeaders = new HttpHeaders();
+
+                String responseBody = "{\"p1_v1\":\"" + _body.get("p1_v0").textValue() + "\",\"p2_v1\":\"" + _body.get("p2_v0").textValue() + "\",\"p3_v1\":\"" + _body.get("p3_v0").textValue() + "\",\"p4_v1\":\"" + _body.get("p4_v0").textValue() + "\",\"p5_v1\":\"" + _body.get("p5_v0").textValue() + "\"}";
+                return forwardResponse(200, responseHeaders, responseBody);
+            };
+            return ResponseEntity.internalServerError().body("UNMAPPED RESPONSE");
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.internalServerError().body(e.toString());
+        }
     }
-}
 
 
 
