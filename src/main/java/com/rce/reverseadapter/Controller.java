@@ -27,7 +27,9 @@ public class Controller {
 
     @RequestMapping(
             value = "/v0/demo",
-            method = RequestMethod.POST
+            method = RequestMethod.POST,
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE
     )
     public ResponseEntity<String> procedure0(@PathVariable Map<String, String> _pathParams,
                                              @RequestParam Map<String,String> _queryParams,
