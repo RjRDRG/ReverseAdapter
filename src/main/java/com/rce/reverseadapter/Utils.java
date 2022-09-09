@@ -57,20 +57,12 @@ public class Utils {
                     .accept(receiveType)
                     .body(BodyInserters.fromValue(body))
                     .retrieve()
-                    .onStatus(
-                            status -> true,
-                            clientResponse -> Mono.empty()
-                    )
                     .toEntity(String.class)
                     .block();
         } else {
             return requestBodySpec
                     .accept(receiveType)
                     .retrieve()
-                    .onStatus(
-                            status -> true,
-                            clientResponse -> Mono.empty()
-                    )
                     .toEntity(String.class)
                     .block();
         }
