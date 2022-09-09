@@ -55,9 +55,9 @@ public class Controller {
 
             String body = "{\"p1_v0\":\"" + _body.get("p1_v1").textValue() + "\",\"p2_v0\":\"" + _body.get("p2_v1").textValue() + "\",\"p3_v0\":\"" + _body.get("p3_v1").textValue() + "\",\"p4_v0\":\"" + _body.get("p4_v1").textValue() + "\",\"p5_v0\":\"" + _body.get("p5_v1").textValue() + "\"}";
 
-            MediaType sendType = MediaType.valueOf("APPLICATION_JSON");
+            MediaType sendType = MediaType.APPLICATION_JSON;
 
-            MediaType receiveType = MediaType.valueOf("APPLICATION_JSON");
+            MediaType receiveType = MediaType.APPLICATION_JSON;
 
             ResponseEntity<String> responseEntity = forwardRequest(
                     scheme, HOST, PORT, method, path, pathParams, queryParams, headerParams, body, sendType, receiveType
