@@ -51,7 +51,7 @@ public class Controller {
 
 
             Map<String, String> headerParams = new HashMap<>();
-            headerParams.put("maxCalls", _headerParams.get("maxCalls"));headerParams.put("calls", _headerParams.get("calls"));headerParams.put("fanout", _headerParams.get("fanout"));
+            headerParams.put("maxcalls", _headerParams.get("maxcalls"));headerParams.put("calls", _headerParams.get("calls"));headerParams.put("fanout", _headerParams.get("fanout"));
 
             String body = "{\"p1_v0\":\"" + _body.get("p1_v1").textValue() + "\",\"p2_v0\":\"" + _body.get("p2_v1").textValue() + "\",\"p3_v0\":\"" + _body.get("p3_v1").textValue() + "\",\"p4_v0\":\"" + _body.get("p4_v1").textValue() + "\",\"p5_v0\":\"" + _body.get("p5_v1").textValue() + "\"}";
 
