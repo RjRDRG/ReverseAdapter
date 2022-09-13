@@ -11,9 +11,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 import reactor.netty.http.client.HttpClient;
 
 import java.time.Duration;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import static com.rce.reverseadapter.Utils.forwardRequest;
@@ -46,7 +44,7 @@ public class Controller {
     }
 
     @RequestMapping(
-            value = "/v0/demo",
+            value = "/v1/demo",
             method = RequestMethod.POST,
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE
@@ -62,7 +60,7 @@ public class Controller {
 
             HttpMethod method = HttpMethod.valueOf("POST");
 
-            String path = "/v1/demo";
+            String path = "/v0/demo";
 
             Map<String, String> pathParams = new HashMap<>();
 
@@ -73,7 +71,7 @@ public class Controller {
             Map<String, String> headerParams = new HashMap<>();
             headerParams.put("maxcalls", _headerParams.get("maxcalls"));headerParams.put("calls", _headerParams.get("calls"));headerParams.put("fanout", _headerParams.get("fanout"));
 
-            String body = "{\"p1_v1\":\"" + _body.get("p1_v0").textValue() + "\",\"p2_v1\":\"" + _body.get("p2_v0").textValue() + "\",\"p3_v1\":\"" + _body.get("p3_v0").textValue() + "\",\"p4_v1\":\"" + _body.get("p4_v0").textValue() + "\",\"p5_v1\":\"" + _body.get("p5_v0").textValue() + "\"}";
+            String body = "{\"p1_v0\":\"" + _body.get("p1_v1").textValue() + "\",\"p2_v0\":\"" + _body.get("p2_v1").textValue() + "\",\"p3_v0\":\"" + _body.get("p3_v1").textValue() + "\",\"p4_v0\":\"" + _body.get("p4_v1").textValue() + "\",\"p5_v0\":\"" + _body.get("p5_v1").textValue() + "\"}";
 
             MediaType sendType = MediaType.APPLICATION_JSON;
 
@@ -90,7 +88,7 @@ public class Controller {
             if(status.value() == 200) {
                 HttpHeaders responseHeaders = new HttpHeaders();
 
-                String responseBody = "{\"p1_v0\":\"" + _body.get("p1_v1").textValue() + "\",\"p2_v0\":\"" + _body.get("p2_v1").textValue() + "\",\"p3_v0\":\"" + _body.get("p3_v1").textValue() + "\",\"p4_v0\":\"" + _body.get("p4_v1").textValue() + "\",\"p5_v0\":\"" + _body.get("p5_v1").textValue() + "\"}";
+                String responseBody = "{\"p1_v1\":\"" + _body.get("p1_v0").textValue() + "\",\"p2_v1\":\"" + _body.get("p2_v0").textValue() + "\",\"p3_v1\":\"" + _body.get("p3_v0").textValue() + "\",\"p4_v1\":\"" + _body.get("p4_v0").textValue() + "\",\"p5_v1\":\"" + _body.get("p5_v0").textValue() + "\"}";
                 return forwardResponse(200, responseHeaders, responseBody);
             };
             return ResponseEntity.internalServerError().body("UNMAPPED RESPONSE");
