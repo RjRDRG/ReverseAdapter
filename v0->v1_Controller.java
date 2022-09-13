@@ -2,9 +2,18 @@ package com.rce.reverseadapter;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.netty.channel.ChannelOption;
+import io.netty.channel.epoll.EpollChannelOption;
 import org.springframework.http.*;
+import org.springframework.http.client.reactive.ReactorClientHttpConnector;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.reactive.function.client.WebClient;
+import reactor.netty.http.client.HttpClient;
+
+import java.time.Duration;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static com.rce.reverseadapter.Utils.forwardRequest;
@@ -13,16 +22,27 @@ import static com.rce.reverseadapter.Utils.forwardResponse;
 @RestController
 public class Controller {
 
-    private final String HOST;
-    private final int PORT;
-
     private final ObjectMapper mapper;
+    final WebClient target;
 
     public Controller() {
         mapper = new ObjectMapper();
 
-        HOST = System.getenv("TARGET_HOST");
-        PORT = Integer.parseInt(System.getenv("TARGET_PORT"));
+        String host = System.getenv("TARGET_HOST");
+        String port = System.getenv("TARGET_PORT");
+
+        HttpClient httpClient = HttpClient.create()
+                .responseTimeout(Duration.ofSeconds(30))
+                .option(ChannelOption.CONNECT_TIMEOUT_MILLIS, 30000)
+                .option(ChannelOption.SO_KEEPALIVE, true)
+                .option(EpollChannelOption.TCP_KEEPIDLE, 300)
+                .option(EpollChannelOption.TCP_KEEPINTVL, 60)
+                .option(EpollChannelOption.TCP_KEEPCNT, 8);
+
+        WebClient.Builder builder = WebClient.builder()
+                .clientConnector(new ReactorClientHttpConnector(httpClient));
+
+        target = builder.baseUrl("http://" + host + ":" + port).build();
     }
 
     @RequestMapping(
@@ -60,7 +80,7 @@ public class Controller {
             MediaType receiveType = MediaType.APPLICATION_JSON;
 
             ResponseEntity<String> responseEntity = forwardRequest(
-                    scheme, HOST, PORT, method, path, pathParams, queryParams, headerParams, body, sendType, receiveType
+                    target, method, path, pathParams, queryParams, headerParams, body, sendType, receiveType
             );
 
             HttpStatus status = responseEntity.getStatusCode();

@@ -9,14 +9,13 @@ import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.util.UriComponentsBuilder;
 import reactor.core.publisher.Mono;
 
+import java.time.Duration;
 import java.util.Map;
 
 public class Utils {
 
     public static ResponseEntity<String> forwardRequest(
-            String scheme,
-            String host,
-            int port,
+            WebClient client,
             HttpMethod method,
             String path,
             Map<String, String> pathParams,
@@ -34,16 +33,13 @@ public class Utils {
 
         UriComponentsBuilder uri = UriComponentsBuilder
                 .newInstance()
-                .scheme(scheme)
-                .host(host)
-                .port(port)
                 .path(pathWithVariables);
 
         for (Map.Entry<String,String> entry : queryParams.entrySet()) {
             uri.queryParam(entry.getKey(),entry.getValue());
         }
 
-        WebClient.RequestBodySpec requestBodySpec = WebClient.create()
+        WebClient.RequestBodySpec requestBodySpec = client
                 .method(method)
                 .uri(uri.build().toUri());
 
@@ -58,12 +54,14 @@ public class Utils {
                     .body(BodyInserters.fromValue(body))
                     .retrieve()
                     .toEntity(String.class)
+                    .timeout(Duration.ofSeconds(30))
                     .block();
         } else {
             return requestBodySpec
                     .accept(receiveType)
                     .retrieve()
                     .toEntity(String.class)
+                    .timeout(Duration.ofSeconds(30))
                     .block();
         }
     }
