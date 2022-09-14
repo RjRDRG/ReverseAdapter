@@ -54,14 +54,12 @@ public class Utils {
                     .body(BodyInserters.fromValue(body))
                     .retrieve()
                     .toEntity(String.class)
-                    .timeout(Duration.ofSeconds(30))
                     .block();
         } else {
             return requestBodySpec
                     .accept(receiveType)
                     .retrieve()
                     .toEntity(String.class)
-                    .timeout(Duration.ofSeconds(30))
                     .block();
         }
     }
